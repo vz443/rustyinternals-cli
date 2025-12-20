@@ -61,9 +61,14 @@ fn read_nt_headers(buffer: &Vec<u8>) {
     let e_lfanew = &buffer[0x3c..0x40];
     let ntpointer = u32::from_le_bytes(e_lfanew.try_into().unwrap());
 
-    let frompointer = &buffer[ntpointer as usize];
+    print!("NT SIGNATURE: ");
+    
+    for i in 0..4 {
+        let digits = &buffer[ntpointer as usize + i];
 
-    println!("NT POINTER: {}", frompointer);
+        print!("{:02X} ", digits);
+    }
+    println!();
 }
 
 
