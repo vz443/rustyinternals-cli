@@ -11,5 +11,6 @@ pub fn handler(){
         io::stdin().read_line(&mut input).expect("geeked");
 
         pehandler::handle_pe(&input);
+        input.clear();
     }
 }
