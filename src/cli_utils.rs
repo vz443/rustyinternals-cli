@@ -34,7 +34,6 @@ pub fn get_pe_reader_header_options() -> u8 {
         
         io::stdin().read_line(&mut input).expect("geeked");
         let is_num = input.trim().parse::<u8>().is_ok();
-        let is_num = input.trim().parse::<u8>().is_ok();
         if is_num {
             return input.trim().parse::<u8>().unwrap();
         }

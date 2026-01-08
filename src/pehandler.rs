@@ -2,19 +2,23 @@ use std::io::prelude::*;
 use std::fs::File;
 
 use crate::cli_utils;
+use crate::errors::errors::ParseError;
 use crate::headers::dosheader::DosHeader;
+use crate::headers::fileheader::FileHeader;
+use crate::headers::optionalheader::{ImageDataDirectory, OptionalHeader};
+use crate::headers::signature::{self, Signature};
 
 pub struct PeFile {
     buf: Vec<u8>, 
     dos: DosHeader, 
-    //coff: CoffHeader,
+    file: FileHeader,
     //optional: OptionalHeader,
     //sections: Vec<SectionHeader>,
 }
 
 pub fn handle_pe(path: &String){
+    initialise_pe(&path);
     let option = cli_utils::get_pe_reader_options(); 
-    
     match option {
         1 => handle_pe_reader(path),
         _ => println!("Invalid Option"),
@@ -27,6 +31,7 @@ fn handle_pe_reader(path: &String) {
     match option {
         1 => read_headers (1, path),
         2 => read_headers(2, path),
+        3 => read_headers(3, path),
         _ => println!("Invalid Option")
     }
 }
@@ -41,13 +46,20 @@ fn read_headers(name: u8, path: &String) {
     
     match name {
         1 => read_dos(&buffer),
-        2 => read_nt_headers(&buffer),
+        2 => print_file_header(&buffer),
+        3 => print_optional_header(&buffer),
         _ => println!("Invalid Option"),
     }
 }
 
 fn read_dos(buffer: &[u8]) {
-    let header = DosHeader::parse(buffer).unwrap();
+    let header = match DosHeader::parse(buffer) {
+        Ok(header) => header,
+        Err(ParseError::IncorrectSliceLength) => {
+            println!("Error parsing the DosHeader, returning...");
+            return;
+        }
+    };
 
     println!("--- DOS HEADER ---");
     println!("e_magic:                 0x{:04X}", header.e_magic);
@@ -92,43 +104,33 @@ fn read_dos(buffer: &[u8]) {
     println!("----------------------");
 }
 
+fn print_sig(buf: &Vec<u8>) {
+    let sig = match Signature::parse(buf) {
+        Ok(sig) => sig,
+        Err(ParseError::IncorrectSliceLength) => { return; },
+    };
 
-fn read_nt_headers(buffer: &Vec<u8>) {
-    let buffer = buffer.clone();
-
-    let e_lfanew = &buffer[0x3c..0x40];
-    let mut ntpointer = u32::from_le_bytes(e_lfanew.try_into().unwrap());
-
-    print!("NT SIGNATURE: ");
+    println!("{:04X}", sig.signature);
     
-    for i in 0..4 {
-        let digits = &buffer[ntpointer as usize + i];
-        print!("{:02X} ", digits);
+    if sig.signature == 0x00004550 {
+        println!("Valid Signature");
     }
-    println!();
-    println!();
-
-    ntpointer += 4;
-    print!("NT File Header: ");
-    println!();
-
-    let machine = &buffer[ntpointer as usize..ntpointer as usize + 2];
-
-    let machine = u16::from_le_bytes(machine.try_into().unwrap());
-
-    print!("Machine: {:02X}", machine);
-    if machine == 0x8664 {
-        print!(" (AMD64)");
+    else {
+        println!("Invalid Signature");
     }
-    else if machine == 0x14c {
-        print!(" (i386");
-    }
-    
-    println!();
-
-    println!("Optional Header");
-
-
 }
 
+fn print_file_header(buf: &[u8]) {
+    FileHeader::parse(buf);
+}
 
+fn print_optional_header(buf: &[u8]) { 
+    let fileheader = FileHeader::parse(buf);
+    OptionalHeader::parse(buf, &fileheader);
+}
+
+fn initialise_pe(path: &str) {
+    //write calls to parse headers and initialise things that are not heavy
+    //return bool if succesful else return what is wrong on analysis 
+    
+}

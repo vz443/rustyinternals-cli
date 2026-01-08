@@ -1,3 +1,5 @@
+use crate::errors::errors::{ParseError};
+
 #[derive(Default)]
 pub struct DosHeader {
     pub e_magic: u16,
@@ -20,22 +22,7 @@ pub struct DosHeader {
     pub e_res2: [u16; 10],
     pub e_lfanew: u32,
 }
-#[derive(Debug)]
-pub enum ParseError {
-    UnexpectedEOF,
-    InvalidMagic,
-    InvalidOffset,
-    InvalidField,
-    SliceError,
-}
 
-use std::array::TryFromSliceError;
-
-impl From<TryFromSliceError> for ParseError {
-    fn from(_: TryFromSliceError) -> Self {
-        ParseError::SliceError
-    }
-}
 impl DosHeader {
     pub fn new() -> Self {
         Self::default()
