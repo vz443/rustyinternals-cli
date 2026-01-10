@@ -1,1 +1,4 @@
 - Implement Diagnostics and error handling everywhere for header parsing, only then move on. 
+- Implement 64 bit pe support. Current is 32 bit only. 
+- Implement more telemetry
+- Section dumping / more analysis

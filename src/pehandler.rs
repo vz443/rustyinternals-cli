@@ -2,6 +2,7 @@ use std::io::prelude::*;
 use std::fs::File;
 
 use crate::cli_utils;
+use crate::diagnostics::diagnostics::ConsoleDiagnosticSink;
 use crate::errors::errors::ParseError;
 use crate::headers::dosheader::DosHeader;
 use crate::headers::fileheader::FileHeader;
@@ -53,13 +54,16 @@ fn read_headers(name: u8, path: &String) {
 }
 
 fn read_dos(buffer: &[u8]) {
-    let header = match DosHeader::parse(buffer) {
-        Ok(header) => header,
-        Err(ParseError::IncorrectSliceLength) => {
-            println!("Error parsing the DosHeader, returning...");
-            return;
-        }
-    };
+    let mut sink = ConsoleDiagnosticSink::new();
+    let header = DosHeader::parse(buffer, &mut sink);
+
+    // Print any diagnostics
+    sink.print_all();
+    
+    if sink.has_fatal() {
+        println!("\n!!! Fatal errors encountered while parsing DOS header !!!\n");
+        return;
+    }
 
     println!("--- DOS HEADER ---");
     println!("e_magic:                 0x{:04X}", header.e_magic);

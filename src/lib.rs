@@ -5,3 +5,4 @@ pub mod headers;
 pub mod errors;
 pub mod sections;
 pub mod diagnostics;
+pub mod reader;

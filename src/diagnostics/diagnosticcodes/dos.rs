@@ -3,4 +3,5 @@ pub enum DosCode {
     InvalidMagic,
     E_lfanewOutOfBounds,
     StubTooSmall,
+    ReadOutOfBounds,
 }
