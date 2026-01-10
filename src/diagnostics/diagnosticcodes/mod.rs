@@ -4,14 +4,8 @@ pub mod sections;
 pub mod imports;
 pub mod heuristics;
 
-use dos::DosCode;
-use sections::SectionCode;
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum DiagnosticCode {
-    Dos(DosCode),
-    Section(SectionCode),
-    //Nt(nt::NtCode),
-    //Import(imports::ImportCode),
-    //Heuristic(heuristics::HeuristicCode),
-}
+pub use dos::DosCode;
+pub use sections::SectionCode;
+// pub use nt::NtCode;
+// pub use imports::ImportCode;
+// pub use heuristics::HeuristicCode;
