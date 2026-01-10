@@ -4,3 +4,4 @@ pub mod cli_utils;
 pub mod headers;
 pub mod errors;
 pub mod sections;
+pub mod diagnostics;
