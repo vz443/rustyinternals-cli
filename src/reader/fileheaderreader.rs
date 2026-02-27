@@ -4,6 +4,7 @@ use crate::{diagnostics::{diagnosticcodes::DosCode, diagnostics::{Diagnostic, Di
 pub struct FileHeaderReader;
 
 
+//TODO: write this into a macro passing in the Diagnostic
 impl Reader for FileHeaderReader {
     
     fn read_u8(buf: &[u8], offset: usize, sink: &mut dyn DiagnosticSink, field: &'static str) -> u8 {
