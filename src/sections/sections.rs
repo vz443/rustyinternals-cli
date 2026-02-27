@@ -1,20 +1,20 @@
 #[derive(Default)]
 struct Section {
-    Name: [u8; 8],
-    VirtualSize: u32,
-    VirtualAddress: u32,
-    SizeOfRawData: u32,
-    PointerToRawData: u32,
-    PointerToRelocations: u32,
-    PointerToLineNumbers: u32,
-    NumberOfRelocations: u16,
-    NumberOfLineNumbers: u16,
-    Characteristics: u32,
+    name: [u8; 8],
+    virtual_size: u32,
+    virtual_address: u32,
+    size_of_raw_data: u32,
+    pointer_to_raw_data: u32,
+    pointer_to_relocations: u32,
+    pointer_to_line_numbers: u32,
+    number_of_relocations: u16,
+    number_of_line_numbers: u16,
+    characteristics: u32,
 }
 
 #[derive(Default)]
 pub struct Sections {
-    Sections: Vec<Section>,    
+    sections: Vec<Section>,
 }
 
 impl Sections {
@@ -28,50 +28,50 @@ impl Sections {
     println!("=== Section Headers ===");
     println!("Number of sections: {}\n", sectionscount);
 
-    for i in 0..*sectionscount {
+    for _i in 0..*sectionscount {
         let mut section = Section::default();
 
-        section.Name = buf[*pointer..*pointer + 8].try_into().unwrap();
+        section.name = buf[*pointer..*pointer + 8].try_into().unwrap();
         *pointer += 8;
 
-        section.VirtualSize =
+        section.virtual_size =
             u32::from_le_bytes(buf[*pointer..*pointer + 4].try_into().unwrap());
         *pointer += 4;
 
-        section.VirtualAddress =
+        section.virtual_address =
             u32::from_le_bytes(buf[*pointer..*pointer + 4].try_into().unwrap());
         *pointer += 4;
 
-        section.SizeOfRawData =
+        section.size_of_raw_data =
             u32::from_le_bytes(buf[*pointer..*pointer + 4].try_into().unwrap());
         *pointer += 4;
 
-        section.PointerToRawData =
+        section.pointer_to_raw_data =
             u32::from_le_bytes(buf[*pointer..*pointer + 4].try_into().unwrap());
         *pointer += 4;
 
-        section.PointerToRelocations =
+        section.pointer_to_relocations =
             u32::from_le_bytes(buf[*pointer..*pointer + 4].try_into().unwrap());
         *pointer += 4;
 
-        section.PointerToLineNumbers =
+        section.pointer_to_line_numbers =
             u32::from_le_bytes(buf[*pointer..*pointer + 4].try_into().unwrap());
         *pointer += 4;
 
-        section.NumberOfRelocations =
+        section.number_of_relocations =
             u16::from_le_bytes(buf[*pointer..*pointer + 2].try_into().unwrap());
         *pointer += 2;
 
-        section.NumberOfLineNumbers =
+        section.number_of_line_numbers =
             u16::from_le_bytes(buf[*pointer..*pointer + 2].try_into().unwrap());
         *pointer += 2;
 
-        section.Characteristics =
+        section.characteristics =
             u32::from_le_bytes(buf[*pointer..*pointer + 4].try_into().unwrap());
         *pointer += 4;
 
 
-        sections.Sections.push(section);
+        sections.sections.push(section);
     }
 
     sections

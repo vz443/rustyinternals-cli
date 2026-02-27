@@ -6,8 +6,8 @@ use crate::diagnostics::diagnostics::ConsoleDiagnosticSink;
 use crate::errors::errors::ParseError;
 use crate::headers::dosheader::DosHeader;
 use crate::headers::fileheader::FileHeader;
-use crate::headers::optionalheader::{ImageDataDirectory, OptionalHeader};
-use crate::headers::signature::{self, Signature};
+use crate::headers::optionalheader::OptionalHeader;
+use crate::headers::signature::Signature;
 
 pub struct PeFile {
     buf: Vec<u8>, 
@@ -108,6 +108,7 @@ fn read_dos(buffer: &[u8]) {
     println!("----------------------");
 }
 
+#[allow(dead_code)]
 fn print_sig(buf: &Vec<u8>) {
     let sig = match Signature::parse(buf) {
         Ok(sig) => sig,
@@ -133,7 +134,7 @@ fn print_optional_header(buf: &[u8]) {
     OptionalHeader::parse(buf, &fileheader);
 }
 
-fn initialise_pe(path: &str) {
+fn initialise_pe(_path: &str) {
     //write calls to parse headers and initialise things that are not heavy
     //return bool if succesful else return what is wrong on analysis 
     
