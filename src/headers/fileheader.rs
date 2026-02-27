@@ -24,14 +24,14 @@ bitflags! {
 
 #[derive(Default)]
 pub struct FileHeader {
-    Machine: u16,
-    NumberOfSections: u16,
-    TimeDateStamp: u32,
-    PointerToSymbolTable: u32,
-    NumberOfSymbols: u32,
-    SizeOfOptionalHeader: u16,
-    Characteristics: Characteristics,
-    pub EndOfFileHeaderPointer: u32,
+    machine: u16,
+    number_of_sections: u16,
+    time_date_stamp: u32,
+    pointer_to_symbol_table: u32,
+    number_of_symbols: u32,
+    size_of_optional_header: u16,
+    characteristics: Characteristics,
+    pub end_of_file_header_pointer: u32,
 }
 
 
@@ -54,39 +54,39 @@ impl FileHeader {
         
         let machine = u16::from_le_bytes(buf[pointer as usize..pointer as usize + 2].try_into().unwrap());
         println!("Machine; {:04X}", machine);
-        fileheader.Machine = machine;
+        fileheader.machine = machine;
         
         pointer += 2;
         let numofsections = u16::from_le_bytes(buf[pointer as usize..pointer as usize + 2].try_into().unwrap()); 
         println!("NumOfSections; {}", numofsections);
-        fileheader.NumberOfSections = numofsections;
+        fileheader.number_of_sections = numofsections;
         
         pointer += 2;
         let timestamp = u32::from_le_bytes(buf[pointer as usize..pointer as usize + 4].try_into().unwrap());
         println!("{:08X}", timestamp); // check this with something that has a timestamp
-        fileheader.TimeDateStamp = timestamp;
+        fileheader.time_date_stamp = timestamp;
 
         pointer += 4;
         let ptrtosymboltable = u32::from_le_bytes(buf[pointer as usize..pointer as usize + 4].try_into().unwrap());
         println!("Pointer to symbol table: {}", ptrtosymboltable);
-        fileheader.PointerToSymbolTable = ptrtosymboltable;
+        fileheader.pointer_to_symbol_table = ptrtosymboltable;
 
         pointer += 4;
         let numofsymbols = u32::from_le_bytes(buf[pointer as usize..pointer as usize + 4].try_into().unwrap());
         println!("Number of symbols: {}", numofsymbols);
-        fileheader.NumberOfSymbols = numofsymbols;
+        fileheader.number_of_symbols = numofsymbols;
 
         pointer += 4;
         let sizeofoptionalheader = u16::from_le_bytes(buf[pointer as usize..pointer as usize + 2].try_into().unwrap());
         println!("Size of optional header: {}", sizeofoptionalheader);
-        fileheader.SizeOfOptionalHeader = sizeofoptionalheader;
+        fileheader.size_of_optional_header = sizeofoptionalheader;
 
         pointer += 2;
         let characteristics = Characteristics::from_bits_truncate(u16::from_le_bytes(buf[pointer as usize..pointer as usize + 2].try_into().unwrap()));
 
         print_characteristics(characteristics);
 
-        fileheader.EndOfFileHeaderPointer = pointer + 2;
+        fileheader.end_of_file_header_pointer = pointer + 2;
 
         fileheader
     }

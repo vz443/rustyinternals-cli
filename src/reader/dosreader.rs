@@ -1,4 +1,4 @@
-use crate::diagnostics::diagnostics::{Diagnostic, DiagnosticCode, DiagnosticSink, Evidence, Location};
+use crate::diagnostics::diagnostics::{Diagnostic, DiagnosticCode, DiagnosticSink, Location};
 use crate::diagnostics::diagnosticcodes::DosCode;
 use crate::reader::reader::Reader;
 

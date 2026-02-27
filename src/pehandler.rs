@@ -75,7 +75,8 @@ fn read_dos(buffer: &[u8]) {
     dosheaderwriter::write_dos_header_with_diagnostics(&header, &sink);
 }
 
-fn print_sig(buf: &[u8]) {
+#[allow(dead_code)]
+fn print_sig(buf: &Vec<u8>) {
     let sig = match Signature::parse(buf) {
         Ok(sig) => sig,
         Err(ParseError::IncorrectSliceLength) => { 
@@ -98,7 +99,7 @@ fn print_optional_header(buf: &[u8]) {
 }
 
 fn print_nt_header(buf: &[u8]) {
-    print_sig(buf);
+    print_sig(&buf.to_vec());
     print_file_header(buf);
     print_optional_header(buf);
 }
@@ -106,5 +107,4 @@ fn print_nt_header(buf: &[u8]) {
 fn initialise_pe(_path: &str) {
     //write calls to parse headers and initialise things that are not heavy
     //return bool if succesful else return what is wrong on analysis 
-    
 }
