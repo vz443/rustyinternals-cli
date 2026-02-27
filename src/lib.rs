@@ -6,3 +6,5 @@ pub mod errors;
 pub mod sections;
 pub mod diagnostics;
 pub mod reader;
+pub mod validator;
+pub mod writer;

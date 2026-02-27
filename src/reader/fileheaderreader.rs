@@ -1,11 +1,12 @@
-use crate::diagnostics::diagnostics::{Diagnostic, DiagnosticCode, DiagnosticSink, Evidence, Location};
-use crate::diagnostics::diagnosticcodes::DosCode;
-use crate::reader::reader::Reader;
+use crate::{diagnostics::{diagnosticcodes::DosCode, diagnostics::{Diagnostic, DiagnosticCode, DiagnosticSink, Location}}, reader::reader::Reader};
 
-pub struct DosReader;
 
-//I think it should be fatal if we cannot read past dos header since that means pe is definitely malformed
-impl Reader for DosReader {
+pub struct FileHeaderReader;
+
+
+//TODO: write this into a macro passing in the Diagnostic
+impl Reader for FileHeaderReader {
+    
     fn read_u8(buf: &[u8], offset: usize, sink: &mut dyn DiagnosticSink, field: &'static str) -> u8 {
         if offset + 1 > buf.len() {
             sink.emit(Diagnostic{
@@ -61,4 +62,4 @@ impl Reader for DosReader {
         
         u64::from_le_bytes(buf[offset .. offset + 8].try_into().unwrap())
     }
-}
+} 
