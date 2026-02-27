@@ -99,14 +99,12 @@ fn print_optional_header(buf: &[u8]) {
 }
 
 fn print_nt_header(buf: &[u8]) {
-    print_sig(buf);
+    print_sig(&buf.to_vec());
     print_file_header(buf);
     print_optional_header(buf);
 }
 
 fn initialise_pe(_path: &str) {
-fn initialise_pe(_path: &str) {
     //write calls to parse headers and initialise things that are not heavy
     //return bool if succesful else return what is wrong on analysis 
-    
 }
