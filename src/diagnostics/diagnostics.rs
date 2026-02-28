@@ -1,4 +1,4 @@
-use crate::diagnostics::diagnosticcodes::{DosCode, SectionCode};
+use crate::diagnostics::diagnosticcodes::{DosCode, FileHeaderCode, NtHeaderCode, OptHeaderCode, SectionCode};
 
 pub struct Diagnostic {
     pub code: DiagnosticCode,
@@ -12,7 +12,9 @@ pub struct Diagnostic {
 pub enum DiagnosticCode {
     Dos(DosCode),
     Section(SectionCode),
-    //Nt(nt::NtCode),
+    FileHeader(FileHeaderCode),
+    NtHeader(NtHeaderCode),
+    OptHeader(OptHeaderCode),
     //Import(imports::ImportCode),
     //Heuristic(heuristics::HeuristicCode),
 }

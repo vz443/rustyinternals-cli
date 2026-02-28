@@ -33,6 +33,7 @@ pub struct OptionalHeader {
     loader_flags: u32,
     number_of_rva_and_sizes: u32,
     data_directory: ImageDataDirectory,
+    end_of_optional_header_pointer: u32,
 }
 
 pub struct OptionalHeaderPe32Plus {

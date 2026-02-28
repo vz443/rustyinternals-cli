@@ -1,20 +1,20 @@
 #[derive(Default)]
-struct Section {
-    name: [u8; 8],
-    virtual_size: u32,
-    virtual_address: u32,
-    size_of_raw_data: u32,
-    pointer_to_raw_data: u32,
-    pointer_to_relocations: u32,
-    pointer_to_line_numbers: u32,
-    number_of_relocations: u16,
-    number_of_line_numbers: u16,
-    characteristics: u32,
+pub struct Section {
+    pub name: [u8; 8],
+    pub virtual_size: u32,
+    pub virtual_address: u32,
+    pub size_of_raw_data: u32,
+    pub pointer_to_raw_data: u32,
+    pub pointer_to_relocations: u32,
+    pub pointer_to_line_numbers: u32,
+    pub number_of_relocations: u16,
+    pub number_of_line_numbers: u16,
+    pub characteristics: u32,
 }
 
 #[derive(Default)]
 pub struct Sections {
-    sections: Vec<Section>,
+    pub sections: Vec<Section>,
 }
 
 impl Sections {
@@ -22,7 +22,7 @@ impl Sections {
         Sections::default()
     }
     
-    pub fn parse_all_sections(buf: &[u8], pointer: &mut usize, sectionscount: &u8) -> Sections {
+    pub fn parse_all_sections(buf: &[u8], pointer: &mut usize, sectionscount: &u16) -> Sections {
     let mut sections = Sections::default();
 
     println!("=== Section Headers ===");

@@ -8,9 +8,12 @@ use crate::headers::dosheader::DosHeader;
 use crate::headers::fileheader::FileHeader;
 use crate::headers::optionalheader::OptionalHeader;
 use crate::headers::signature::Signature;
+use crate::sections::sections::Sections;
 use crate::writer::dosheaderwriter;
+use crate::writer::sectionwriter;
 use crate::writer::signaturewriter;
 
+//this is a mess but i am primarily working on thte lib crates now, this will be cleaned up later with sequential reading and storage  rather than parsing 1000 times
 pub struct PeFile {
     buf: Vec<u8>, 
     dos: DosHeader, 
@@ -37,6 +40,7 @@ fn handle_pe_reader(path: &String) {
         3 => read_headers(3, path), // File Header
         4 => read_headers(4, path), // Optional Header
         5 => read_headers(5, path), // NT Header (Full)
+        6 => read_headers(6, path), // Section Headers
         _ => println!("Invalid Option")
     }
 }
@@ -55,6 +59,7 @@ fn read_headers(name: u8, path: &String) {
         3 => print_file_header(&buffer),
         4 => print_optional_header(&buffer),
         5 => print_nt_header(&buffer),
+        6 => print_section_headers(&buffer),
         _ => println!("Invalid Option"),
     }
 }
@@ -73,6 +78,14 @@ fn read_dos(buffer: &[u8]) {
 
     // Use the new writer
     dosheaderwriter::write_dos_header_with_diagnostics(&header, &sink);
+}
+
+fn print_section_headers(buf: &[u8]) {
+    let fileheader =FileHeader::parse(buf); 
+    let  optheader = OptionalHeader::parse(buf, &fileheader);
+    let mut pointer =  fileheader.end_of_file_header_pointer as usize;
+    let sections = Sections::parse_all_sections(buf, &mut pointer.clone(), &fileheader.number_of_sections); // fix the clone and the mutable borrow here
+    sectionwriter::write_sections(&sections);
 }
 
 #[allow(dead_code)]
