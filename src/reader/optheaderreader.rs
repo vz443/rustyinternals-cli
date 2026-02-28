@@ -1,18 +1,16 @@
-use crate::{diagnostics::{diagnosticcodes::{ FileHeaderCode }, diagnostics::{Diagnostic, DiagnosticCode, DiagnosticSink, Location}}, reader::reader::Reader};
-
-
-pub struct FileHeaderReader;
+use crate::{diagnostics::{diagnosticcodes::{NtHeaderCode, OptHeaderCode}, diagnostics::{Diagnostic, DiagnosticCode, DiagnosticSink, Location}}, reader::reader::Reader};
+pub struct OptHeaderReader;
 
 //Also check if this unwrap pattern is fine, since we are bounds checking the splice
 //TODO: write this into a macro passing in the Diagnostic
-impl Reader for FileHeaderReader {
+impl Reader for OptHeaderReader {
     
     fn read_u8(buf: &[u8], offset: usize, sink: &mut dyn DiagnosticSink, field: &'static str) -> u8 {
         if offset + 1 > buf.len() {
             sink.emit(Diagnostic{
-                code: DiagnosticCode::FileHeader(FileHeaderCode::ReadOutOfBounds),
+                code: DiagnosticCode::OptHeader(OptHeaderCode::ReadOutOfBounds),
                 severity: crate::diagnostics::diagnostics::Severity::Fatal,
-                message: "FileHeader read is out of bounds. PE must be malformed".to_string(),
+                message: "OptHeader read is out of bounds. PE must be malformed".to_string(),
                 location: Some(Location::Field(field)),
                 evidence: None,
             });
@@ -24,9 +22,9 @@ impl Reader for FileHeaderReader {
     fn read_u16(buf: &[u8], offset: usize, sink: &mut dyn DiagnosticSink, field: &'static str) -> u16 {
         if offset + 2 > buf.len() {
             sink.emit(Diagnostic{
-                code: DiagnosticCode::FileHeader(FileHeaderCode::ReadOutOfBounds),
+                code: DiagnosticCode::OptHeader(OptHeaderCode::ReadOutOfBounds),
                 severity: crate::diagnostics::diagnostics::Severity::Fatal,
-                message: "FileHeader read is out of bounds. PE must be malformed".to_string(),
+                message: "OptHeader read is out of bounds. PE must be malformed".to_string(),
                 location: Some(Location::Field(field)),
                 evidence: None,
             });
@@ -38,9 +36,9 @@ impl Reader for FileHeaderReader {
     fn read_u32(buf: &[u8], offset: usize, sink: &mut dyn DiagnosticSink, field: &'static str) -> u32 {
         if offset + 4 > buf.len() {
             sink.emit(Diagnostic{
-                code: DiagnosticCode::FileHeader(FileHeaderCode::ReadOutOfBounds),
+                code: DiagnosticCode::OptHeader(OptHeaderCode::ReadOutOfBounds),
                 severity: crate::diagnostics::diagnostics::Severity::Fatal,
-                message: "FileHeader read is out of bounds. PE must be malformed".to_string(),
+                message: "OptHeader read is out of bounds. PE must be malformed".to_string(),
                 location: Some(Location::Field(field)),
                 evidence: None,
             });
@@ -52,9 +50,9 @@ impl Reader for FileHeaderReader {
     fn read_u64(buf: &[u8], offset: usize, sink: &mut dyn DiagnosticSink, field: &'static str) -> u64 {
         if offset + 8 > buf.len() {
             sink.emit(Diagnostic{
-                code: DiagnosticCode::FileHeader(FileHeaderCode::ReadOutOfBounds),
+                code: DiagnosticCode::OptHeader(OptHeaderCode::ReadOutOfBounds),
                 severity: crate::diagnostics::diagnostics::Severity::Fatal,
-                message: "FileHeader read is out of bounds. PE must be malformed".to_string(),
+                message: "OptHeader read is out of bounds. PE must be malformed".to_string(),
                 location: Some(Location::Field(field)),
                 evidence: None,
             });

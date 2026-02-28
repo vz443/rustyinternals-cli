@@ -35,6 +35,7 @@ pub fn get_pe_reader_header_options() -> u8 {
         println!("3. File Header (COFF)");
         println!("4. Optional Header");
         println!("5. NT Header (Full)");
+        println!("6. Section Headers");
         println!("x. Exit");
         println!("========================");
         print!("Enter choice: ");

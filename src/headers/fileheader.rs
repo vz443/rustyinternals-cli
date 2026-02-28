@@ -25,7 +25,7 @@ bitflags! {
 #[derive(Default)]
 pub struct FileHeader {
     machine: u16,
-    number_of_sections: u16,
+    pub number_of_sections: u16,
     time_date_stamp: u32,
     pointer_to_symbol_table: u32,
     number_of_symbols: u32,
